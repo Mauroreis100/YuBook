@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "168310297575",
+    "project_id": "yubook-lecc41",
+    "storage_bucket": "yubook-lecc41.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168310297575:android:761581032e289bb86ce342",
+        "android_client_info": {
+          "package_name": "com.example.yubook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDicNjVb8XFSMG2LnIBwOWXhM1UGxu3oKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
