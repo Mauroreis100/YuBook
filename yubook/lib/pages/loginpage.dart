@@ -3,16 +3,17 @@ import 'package:yubook/components/MyTextField.dart';
 import 'package:yubook/components/my_button.dart';
 class LoginPage extends StatelessWidget{
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   LoginPage({super.key});
 
   void login(){}
 
+  @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -33,7 +34,7 @@ class LoginPage extends StatelessWidget{
 
               const SizedBox(height: 25,),
 
-              //email textfield
+              //email textfKield
               MyTextField(
                   hintText: "Email",
                   controller: emailController,

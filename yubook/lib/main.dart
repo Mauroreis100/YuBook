@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:yubook/theme/light_mode.dart';
 import 'firebase_options.dart';
-import 'pages/LoginPage.dart';
-import 'theme/light_mode.dart';
+import 'pages/loginpage.dart';
 import 'theme/dark_mode.dart';
 
 void main() async{
@@ -15,6 +14,7 @@ void main() async{
 class MyApp extends StatelessWidget{
   const MyApp({super.key});
 
+  @override
   Widget build(BuildContext context){
     return MaterialApp(
       debugShowMaterialGrid: false,
