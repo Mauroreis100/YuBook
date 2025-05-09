@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:yubook/auth/auth.dart';
 import 'package:yubook/theme/light_mode.dart';
 import 'firebase_options.dart';
-import 'pages/loginpage.dart';
 import 'theme/dark_mode.dart';
 
 void main() async{
@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      debugShowMaterialGrid: false,
-      home: LoginPage(),
+      debugShowCheckedModeBanner: false,
+      home: AuthPage(),
       theme: lightMode,
       darkTheme: darkMode,
     );
