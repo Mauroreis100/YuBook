@@ -31,10 +31,10 @@ class _RegisterPageState extends State<RegisterPage> {
     );
     // confirmar se as duas passwords sao iguais
 
-    if(passwordController != confirmPasswordController){
+    if(passwordController.text != confirmPasswordController.text){
       Navigator.pop(context);
 
-      // mostrar mensagem ao user
+      // mostrar mensagpem ao user
       displayMessageToUser("Passwords don't match!", context);
     }else{
       // try to create the user

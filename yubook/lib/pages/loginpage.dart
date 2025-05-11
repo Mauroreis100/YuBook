@@ -17,32 +17,40 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController passwordController = TextEditingController();
 
-  void login() async{
+void login() async {
+  // Show loading indicator
+  showDialog(
+    context: context,
+    builder: (context) => const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
 
-    showDialog(
-        context: context,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(),)
+  try {
+    // Attempt to sign in
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
     );
 
-    // try to sign in
-
-    try{
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-
-    // pop loading
-      if(context.mounted) Navigator.pop(context);
+    // Check if the widget is still mounted before popping the loading dialog
+    if (mounted) {
+      Navigator.pop(context);
     }
-
-    // display errors
-
-    on FirebaseAuthException catch(e){
+  } on FirebaseAuthException catch (e) {
+    // Check if the widget is still mounted before handling the error
+    if (mounted) {
       Navigator.pop(context);
       displayMessageToUser(e.code, context);
     }
-
-
+  } catch (e) {
+    // Handle any other exceptions
+    if (mounted) {
+      Navigator.pop(context);
+      displayMessageToUser("An unexpected error occurred.", context);
+    }
   }
+}
 
   @override
   Widget build(BuildContext context){
