@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yubook/pages/registerpage.dart';
 import 'package:yubook/pages/loginpage.dart';
+
+
+//Este é a pior lógica de aplicativo que já mexi! 
+
 class LoginOrRegister extends StatefulWidget{
 
   const LoginOrRegister({super.key});
