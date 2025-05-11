@@ -1,23 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yubook/components/hamburguer.dart';
 
-class HomePage extends StatelessWidget{
-
+class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  void logout(){
+  void logout() {
     FirebaseAuth.instance.signOut();
   }
 
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: Center(child: Text("Home"),),actions: [
-          IconButton(onPressed: logout, icon: Icon(Icons.logout))
-        ],),
+        appBar: AppBar(
+          title: Center(child: Text("Home")),
+          actions: [IconButton(onPressed: logout, icon: Icon(Icons.logout)), ],
+        ),
+        drawer: HamburguerMenu()
       ),
     );
   }
-
 }
