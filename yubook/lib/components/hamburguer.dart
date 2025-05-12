@@ -45,6 +45,42 @@ class HamburguerMenu extends StatelessWidget {
               },
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 25.0),
+            child: ListTile(
+              leading: Icon(Icons.info, color: Colors.white),
+              title: Text('Register', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                // Navegar para a página sobre
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/register');
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 25.0),
+            child: ListTile(
+              leading: Icon(Icons.info, color: Colors.white),
+              title: Text('aDD BUSINESS form', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                // Navegar para a página sobre
+                Navigator.pop(context);
+                  Navigator.pushNamed(context, '/add_business_form');
+              },
+            ),
+          ),
+           Padding(
+            padding: const EdgeInsets.only(left: 25.0),
+            child: ListTile(
+              leading: Icon(Icons.info, color: Colors.white),
+              title: Text('loginpage', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                // Navegar para a página sobre
+                Navigator.pop(context);
+                  Navigator.pushNamed(context, '/loginpage');
+              },
+            ),
+          ),
         ],
       ),
     );

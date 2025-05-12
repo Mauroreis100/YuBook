@@ -26,32 +26,50 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
       TextEditingController();
 
   void registerUser() async {
-    // circulo de carregamento
+    // Show loading indicator
     showDialog(
       context: context,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
-    // confirmar se as duas passwords sao iguais
 
+    // Confirm if the two passwords match
     if (passwordController.text != confirmPasswordController.text) {
       Navigator.pop(context);
 
-      // mostrar mensagpem ao user
+      // Show message to the user
       displayMessageToUser("Passwords don't match!", context);
     } else {
-      // try to create the user
+      // Try to create the user
       try {
         UserCredential? userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordController.text,
-            );
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        
+        // Save user data to Firestore
+        await userFirestore.createUserDocument(
+          usernameController.text,
+          emailController.text,
+          null,
+        );
+          print(userCredential.user!.uid);
 
-        Navigator.pop(context);
-        Navigator.pushNamed(context, '/userType');
+        // Navigate to the usertype page and pass the data
+        if (mounted) {
+          Navigator.pop(context);
+          Navigator.pushNamed(
+            context,
+            '/usertype',
+            arguments: {
+              'username': usernameController.text,
+              'email': emailController.text,
+            },
+          );
+        }
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
-        //mostrar a mensagem ao user
+        // Show the error message to the user
         displayMessageToUser(e.code, context);
       }
     }
