@@ -147,7 +147,10 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
                 children: [
                   Text("Already have an account?"),
                   GestureDetector(
-                    onTap: widget.onTap,
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/loginpage');
+                      },
                     child: Text(
                       "Login here",
                       style: TextStyle(fontWeight: FontWeight.bold),

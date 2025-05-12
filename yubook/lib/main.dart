@@ -28,15 +28,15 @@ class MyApp extends StatelessWidget {
       title: 'YuBook',
       theme: lightMode,
       darkTheme: darkMode,
-      initialRoute: '/',
+      initialRoute: '/loginpage',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => LoginPage(onTap: () {}),
         '/home_page': (context) => HomePage(),
         '/loginpage': (context) => LoginPage(onTap: () {}),
         '/register': (context) => RegisterPage(onTap: () {}),
         '/usertype': (context) => UserTypePage(),
-        '/bookingPage': (context) => BookingPage(),
-        '/add_business_form': (context) => AddBusinessFormPage(),
+   //     '/bookingPage': (context) => BookingPage(),
+ //       '/add_business_form': (context) => AddBusinessFormPage(),
       },
     );
   }

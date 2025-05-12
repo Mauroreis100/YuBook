@@ -13,5 +13,4 @@ Pode remover o posts e negócios
 Gerente:
 Ter dashboard do seu negócio (parte provavelmente difícil mas núcleo para o aplicativo)
 Adicionar serviço e fotos podem estar associadas a esse serviço
-Como lidar com serviços que vem até a ti e os que tens de ir até lá? Talvez escolher uma vertente apenas
 Confirmar agendamentos de clientes

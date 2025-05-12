@@ -7,6 +7,7 @@ class HamburguerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.grey,
+      
       child: Column(
         children: [
           DrawerHeader(
@@ -24,6 +25,15 @@ class HamburguerMenu extends StatelessWidget {
             onTap: () {
               // Navegar para a página inicial
               Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.add, color: Colors.white),
+            title: Text('Add Business', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navegar para a página inicial
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/add_business_form');
             },
           ),
           ListTile(

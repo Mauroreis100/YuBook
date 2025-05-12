@@ -36,11 +36,17 @@ void login() async {
     // Check if the widget is still mounted before popping the loading dialog
     if (mounted) {
       Navigator.pop(context);
+       Navigator.pushNamedAndRemoveUntil(context, '/home_page', (route) => false);
+       ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login successful!')),
+                      );
+                      
     }
   } on FirebaseAuthException catch (e) {
     // Check if the widget is still mounted before handling the error
     if (mounted) {
       Navigator.pop(context);
+
       displayMessageToUser(e.code, context);
     }
   } catch (e) {
@@ -118,7 +124,10 @@ void login() async {
                 children: [
                   Text("Don't have an account?"),
                   GestureDetector(
-                    onTap: widget.onTap,
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/register');
+                      },
                     child: Text("Register here", style: TextStyle(fontWeight: FontWeight.bold),),
                   )
                 ],
