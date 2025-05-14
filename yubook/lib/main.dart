@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(onTap: () {}),
         '/usertype': (context) => UserTypePage(),
    //     '/bookingPage': (context) => BookingPage(),
- //       '/add_business_form': (context) => AddBusinessFormPage(),
+       '/add_business_form': (context) => AddBusinessFormPage(),
       },
     );
   }

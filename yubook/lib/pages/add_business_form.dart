@@ -17,14 +17,12 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
   final TextEditingController _locationController = TextEditingController();
   String? _profilePhoto;
 
-final  FirebaseServiceAll fireAll = FirebaseServiceAll();
+  final FirebaseServiceAll fireAll = FirebaseServiceAll();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Adicionar Negócio'),
-      ),
+      appBar: AppBar(title: Text('Adicionar Negócio')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -43,7 +41,9 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
               ),
               TextFormField(
                 controller: _openingTimeController,
-                decoration: InputDecoration(labelText: 'Hora de abertura (opcional)'),
+                decoration: InputDecoration(
+                  labelText: 'Hora de abertura (opcional)',
+                ),
                 readOnly: true,
                 onTap: () async {
                   TimeOfDay? pickedTime = await showTimePicker(
@@ -57,7 +57,9 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
               ),
               TextFormField(
                 controller: _closingTimeController,
-                decoration: InputDecoration(labelText: 'Hora de encerramento (opcional)'),
+                decoration: InputDecoration(
+                  labelText: 'Hora de encerramento (opcional)',
+                ),
                 readOnly: true,
                 onTap: () async {
                   TimeOfDay? pickedTime = await showTimePicker(
@@ -115,9 +117,12 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
                   height: 150,
                   width: double.infinity,
                   color: Colors.grey[300],
-                  child: _profilePhoto == null
-                      ? Center(child: Text('Toque para adicionar foto de perfil'))
-                      : Center(child: Text('Foto de perfil adicionada')),
+                  child:
+                      _profilePhoto == null
+                          ? Center(
+                            child: Text('Toque para adicionar foto de perfil'),
+                          )
+                          : Center(child: Text('Foto de perfil adicionada')),
                 ),
               ),
               SizedBox(height: 16),
@@ -127,12 +132,14 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
                     // Prepare the data to be added to Firestore
                     final businessData = {
                       'name': _nameController.text,
-                      'abertura': _openingTimeController.text.isNotEmpty
-                          ? _openingTimeController.text
-                          : null,
-                      'encerramento': _closingTimeController.text.isNotEmpty
-                          ? _closingTimeController.text
-                          : null,
+                      'abertura':
+                          _openingTimeController.text.isNotEmpty
+                              ? _openingTimeController.text
+                              : null,
+                      'encerramento':
+                          _closingTimeController.text.isNotEmpty
+                              ? _closingTimeController.text
+                              : null,
                       'email': _emailController.text,
                       'phone': _phoneController.text,
                       'location': _locationController.text,
@@ -146,7 +153,9 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
 
                       // Show success message
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Negócio adicionado com sucesso!')),
+                        const SnackBar(
+                          content: Text('Negócio adicionado com sucesso!'),
+                        ),
                       );
 
                       // Clear the form
@@ -154,12 +163,22 @@ final  FirebaseServiceAll fireAll = FirebaseServiceAll();
                       setState(() {
                         _profilePhoto = null;
                       });
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, "home_page");
+                      NavigatorState? navigatorState = Navigator.maybeOf(
+                        context,
+                      );
+                      if (navigatorState != null) {
+                        navigatorState
+                          ..pop()
+                          ..pop()
+                          ..pushNamed('/home_page');
+                      }
+                      // Mensagem de sucesso? Snackbar
                     } catch (e) {
                       // Show error message
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Erro ao adicionar negócio: $e')),
+                        SnackBar(
+                          content: Text('Erro ao adicionar negócio: $e'),
+                        ),
                       );
                     }
                   }

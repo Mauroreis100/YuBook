@@ -72,7 +72,7 @@ print(uid);
                 // Update user type to "Business" in Firestore
                 await updateUserType('gestor');
                 // Navigate to Business form page
-                Navigator.pop(context);
+               
                 Navigator.pushNamed(context, '/add_business_form');
               },
               child: const Text('Business'),
