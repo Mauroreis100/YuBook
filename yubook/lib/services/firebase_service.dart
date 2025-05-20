@@ -72,4 +72,10 @@ class FirebaseServiceAll {
       rethrow;
     }
   }
+
+  // Get current user ID
+  String getCurrentUserId() {
+    User? user = _auth.currentUser;
+    return user != null ? user.uid : '';
+  }
 }

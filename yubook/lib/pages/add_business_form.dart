@@ -131,6 +131,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   if (_formKey.currentState!.validate()) {
                     // Prepare the data to be added to Firestore
                     final businessData = {
+                      'userId': fireAll.getCurrentUserId(),
                       'name': _nameController.text,
                       'abertura':
                           _openingTimeController.text.isNotEmpty
