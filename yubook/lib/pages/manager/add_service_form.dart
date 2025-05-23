@@ -1,25 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:yubook/services/firebase_service.dart';
 class AddServicePage extends StatefulWidget {
   @override
   _AddServicePageState createState() => _AddServicePageState();
 }
 
 class _AddServicePageState extends State<AddServicePage> {
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
-  final TextEditingController _servicoIdController = TextEditingController();
-  final TextEditingController _empresaIdController = TextEditingController();
 
+ final FirebaseServiceAll fireAll = FirebaseServiceAll();
   void _saveService() {
     if (_formKey.currentState!.validate()) {
       final String nome = _nomeController.text;
       final String descricao = _descricaoController.text;
       final double preco = double.tryParse(_precoController.text) ?? 0.0;
-      final String servicoId = _servicoIdController.text;
-      final String empresaId = _empresaIdController.text;
+      
 
       // TODO: Add logic to save the service (e.g., API call or database operation)
 
@@ -32,8 +32,7 @@ class _AddServicePageState extends State<AddServicePage> {
       _nomeController.clear();
       _descricaoController.clear();
       _precoController.clear();
-      _servicoIdController.clear();
-      _empresaIdController.clear();
+     
     }
   }
 
@@ -83,31 +82,47 @@ class _AddServicePageState extends State<AddServicePage> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _servicoIdController,
-                decoration: InputDecoration(labelText: 'Serviço ID'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o ID do serviço';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _empresaIdController,
-                decoration: InputDecoration(labelText: 'Empresa ID'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o ID da empresa';
-                  }
-                  return null;
-                },
-              ),
+            
+            
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveService,
-                child: Text('Salvar Serviço'),
-              ),
+           ElevatedButton(
+  onPressed: () async {
+    if (_formKey.currentState!.validate()) {
+      final userId = fireAll.getCurrentUserId();
+      if (userId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuário não autenticado')),
+        );
+        return;
+      }
+
+      final serviceData = {
+        'empresaId': userId,
+        'name': _nomeController.text,
+        'price': double.tryParse(_precoController.text) ?? 0.0,
+        'description': _descricaoController.text,
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+
+      try {
+        fireAll.addData('servicos', serviceData);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Serviço adicionado com sucesso')),
+        );
+
+        Navigator.pop(context);
+        
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao adicionar serviço: $e')),
+        );
+      }
+    }
+  },
+  child: Text('Salvar Serviço'),
+),
+
             ],
           ),
         ),
@@ -120,8 +135,6 @@ class _AddServicePageState extends State<AddServicePage> {
     _nomeController.dispose();
     _descricaoController.dispose();
     _precoController.dispose();
-    _servicoIdController.dispose();
-    _empresaIdController.dispose();
     super.dispose();
   }
 }

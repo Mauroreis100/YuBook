@@ -38,12 +38,30 @@ class HamburguerMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
-            title: Text('Configurações', style: TextStyle(color: Colors.white)),
+            title: Text('Adicionar Serviço', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navegar para a página de configurações
               Navigator.pop(context);
+               Navigator.pushNamed(context, '/services_page');
             },
           ),
+           ListTile(
+            leading: Icon(Icons.settings, color: Colors.white),
+            title: Text('Ver Serviço', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navegar para a página de configurações
+              Navigator.pop(context,  '/services_view');
+            },
+          ),
+ ListTile(
+            leading: Icon(Icons.settings, color: Colors.white),
+            title: Text('Ver Serviços', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              // Navegar para a página de configurações
+              Navigator.pop(context,  '/services_page');
+            },
+          ),
+          
           Padding(
             padding: const EdgeInsets.only(left: 25.0),
             child: ListTile(

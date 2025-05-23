@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FirebaseServiceAll {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+ String? getCurrentUserId() {
+    return FirebaseAuth.instance.currentUser?.uid;
+  }
   // Initialize Firebase
   Future<void> initializeFirebase() async {
     try {
@@ -73,9 +75,5 @@ class FirebaseServiceAll {
     }
   }
 
-  // Get current user ID
-  String getCurrentUserId() {
-    User? user = _auth.currentUser;
-    return user != null ? user.uid : '';
-  }
+
 }

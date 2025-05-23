@@ -4,6 +4,8 @@ import 'package:yubook/auth/auth.dart';
 import 'package:yubook/pages/home_page.dart';
 import 'package:yubook/pages/loginpage.dart';
 import 'package:yubook/pages/add_business_form.dart';
+import 'package:yubook/pages/manager/add_service_form.dart';
+import 'package:yubook/pages/manager/services_page.dart';
 import 'package:yubook/pages/registerpage.dart';
 import 'package:yubook/pages/usertype.dart';
 import 'package:yubook/theme/light_mode.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         '/loginpage': (context) => LoginPage(onTap: () {}),
         '/register': (context) => RegisterPage(onTap: () {}),
         '/usertype': (context) => UserTypePage(),
+        '/add_service_form': (context) => AddServicePage(),
+        '/services_page': (context) => BusinessServicesPage(),
    //     '/bookingPage': (context) => BookingPage(),
        '/add_business_form': (context) => AddBusinessFormPage(),
       },
