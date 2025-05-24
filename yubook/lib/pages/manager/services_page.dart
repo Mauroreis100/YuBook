@@ -17,7 +17,6 @@ print('User ID: $userId');
               stream: FirebaseFirestore.instance
                   .collection('servicos')
                   .where('empresaId', isEqualTo: userId)
-                  .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -40,6 +39,7 @@ print('User ID: $userId');
                       title: Text(data['name'] ?? 'Sem nome'),
                       subtitle: Text('R\$ ${data['price'].toString()}'),
                       trailing: Text(data['description'] ?? ''),
+                      // Colocar icons de apagar e editar
                     );
                   },
                 );

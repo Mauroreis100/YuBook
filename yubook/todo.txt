@@ -12,5 +12,4 @@ Pode remover o posts e negócios
 
 Gerente:
 Ter dashboard do seu negócio (parte provavelmente difícil mas núcleo para o aplicativo)
-Ver serviços adiconados
 Confirmar agendamentos de clientes

@@ -47,7 +47,7 @@ class HamburguerMenu extends StatelessWidget {
           ),
            ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
-            title: Text('Ver Serviço', style: TextStyle(color: Colors.white)),
+            title: Text('Ver Serviços', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navegar para a página de configurações
               Navigator.pop(context,  '/services_view');
