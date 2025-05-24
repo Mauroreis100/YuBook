@@ -49,6 +49,7 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
         
         // Save user data to Firestore
         await userFirestore.createUserDocument(
+          userCredential.user!.uid,
           usernameController.text,
           emailController.text,
           null,

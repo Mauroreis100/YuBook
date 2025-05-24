@@ -7,8 +7,9 @@ class FirestoreServiceUsers {
     "users",
   );
   // CREATE a new note
-  Future<void> createUserDocument(String nome, String email, String? tipoUser) async {
-    users.add({
+  Future<void> createUserDocument(String uid,String nome, String email, String? tipoUser) async {
+    users.doc(uid).set({
+      "uid": uid,
       "nome": nome,
       "email": email,
       "tipoUser": tipoUser,
