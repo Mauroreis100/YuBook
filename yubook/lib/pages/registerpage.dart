@@ -3,6 +3,7 @@ import 'package:yubook/support/users_firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:yubook/components/MyTextField.dart';
 import 'package:yubook/components/my_button.dart';
+import 'package:yubook/services/firebase_service.dart';
 
 import '../support/supportFunctions.dart';
 
@@ -14,7 +15,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
+  final FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
+  final FirebaseServiceAll firebaseService = FirebaseServiceAll();
 
   final TextEditingController emailController = TextEditingController();
 
@@ -43,10 +45,10 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
       try {
         UserCredential? userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-        
+              email: emailController.text,
+              password: passwordController.text,
+            );
+
         // Save user data to Firestore
         await userFirestore.createUserDocument(
           userCredential.user!.uid,
@@ -54,7 +56,7 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
           emailController.text,
           null,
         );
-          print(userCredential.user!.uid);
+        print(userCredential.user!.uid);
 
         // Navigate to the usertype page and pass the data
         if (mounted) {
@@ -73,6 +75,56 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
         // Show the error message to the user
         displayMessageToUser(e.code, context);
       }
+    }
+  }
+
+  void loginWithGoogle() async {
+    showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    try {
+      final user = await firebaseService.signInWithGoogle();
+      if (user == null) {
+        if (mounted) Navigator.pop(context);
+        return;
+      }
+      // Verifica se o user já existe no Firestore
+      final snapshot = await userFirestore.users.doc(user.uid).get();
+      if (!snapshot.exists) {
+        // Novo utilizador, criar documento e ir para escolha de tipo
+        await userFirestore.createUserDocument(
+          user.uid,
+          user.displayName ?? '',
+          user.email ?? '',
+          null,
+        );
+        if (mounted) {
+          Navigator.pop(context);
+          Navigator.pushNamed(
+            context,
+            '/usertype',
+            arguments: {
+              'username': user.displayName ?? '',
+              'email': user.email ?? '',
+              'uid': user.uid,
+            },
+          );
+        }
+      } else {
+        // Já existe, vai para home
+        if (mounted) {
+          Navigator.pop(context);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home_page',
+            (route) => false,
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      displayMessageToUser('Erro ao fazer login com Google', context);
     }
   }
 
@@ -140,6 +192,10 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
               // sign in button
               MyButton(text: "Register", onTap: registerUser),
 
+              const SizedBox(height: 16),
+
+              MyGoogleButton(text: "Entrar com Google", onTap: loginWithGoogle),
+
               const SizedBox(height: 25),
 
               //Already have an account? Login here
@@ -151,7 +207,7 @@ final  FirestoreServiceUsers userFirestore = FirestoreServiceUsers();
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/loginpage');
-                      },
+                    },
                     child: Text(
                       "Login here",
                       style: TextStyle(fontWeight: FontWeight.bold),

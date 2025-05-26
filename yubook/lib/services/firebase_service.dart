@@ -1,13 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseServiceAll {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
- String? getCurrentUserId() {
+  String? getCurrentUserId() {
     return FirebaseAuth.instance.currentUser?.uid;
   }
+
   // Initialize Firebase
   Future<void> initializeFirebase() async {
     try {
@@ -58,7 +60,11 @@ class FirebaseServiceAll {
   }
 
   // Update data in Firestore
-  Future<void> updateData(String collection, String docId, Map<String, dynamic> data) async {
+  Future<void> updateData(
+    String collection,
+    String docId,
+    Map<String, dynamic> data,
+  ) async {
     try {
       await _firestore.collection(collection).doc(docId).update(data);
     } catch (e) {
@@ -75,5 +81,23 @@ class FirebaseServiceAll {
     }
   }
 
-
+  // Sign in with Google
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return null; // O utilizador cancelou
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+      return userCredential.user;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
