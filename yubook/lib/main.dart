@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:yubook/auth/auth.dart';
 import 'package:yubook/pages/home_page.dart';
 import 'package:yubook/pages/loginpage.dart';
 import 'package:yubook/pages/add_business_form.dart';
@@ -11,9 +10,9 @@ import 'package:yubook/pages/usertype.dart';
 import 'package:yubook/theme/light_mode.dart';
 import 'firebase_options.dart';
 import 'theme/dark_mode.dart';
-import 'pages/user/service_list_page.dart';
-import 'pages/user/booking_page.dart';
-import 'package:yubook/services/firebase_service.dart';
+import 'pages/user/booking_history_page.dart';
+import 'package:yubook/pages/manager/manager_dashboard_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -39,10 +38,11 @@ class MyApp extends StatelessWidget {
         '/usertype': (context) => UserTypePage(),
         '/add_service_form': (context) => AddServicePage(),
         '/services_page': (context) => BusinessServicesPage(),
-   //     '/bookingPage': (context) => BookingPage(),
-       '/add_business_form': (context) => AddBusinessFormPage(),
+        //     '/bookingPage': (context) => BookingPage(),
+        '/add_business_form': (context) => AddBusinessFormPage(),
+        '/booking_history': (context) => BookingHistoryPage(),
+        '/manager_dashboard': (context) => ManagerDashboardPage(),
       },
     );
   }
 }
-

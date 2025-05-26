@@ -10,6 +10,10 @@ class ServiceListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Available Services"),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('services').snapshots(),
@@ -33,14 +37,15 @@ class ServiceListPage extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
-                  leading: service['imageUrl'] != null
-                      ? Image.network(
-                          service['imageUrl'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.design_services, size: 50),
+                  leading:
+                      service['imageUrl'] != null
+                          ? Image.network(
+                            service['imageUrl'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          )
+                          : const Icon(Icons.design_services, size: 50),
                   title: Text(service['name'] ?? 'Unnamed Service'),
                   subtitle: Text(service['description'] ?? 'No description'),
                   trailing: const Icon(Icons.arrow_forward),
@@ -48,7 +53,11 @@ class ServiceListPage extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       '/bookingPage',
-                      arguments: service.id, // Pass service ID to booking page
+                      arguments: {
+                        'serviceId': service.id,
+                        'negocioId':
+                            service['negocioId'] ?? service['businessId'] ?? '',
+                      },
                     );
                   },
                 ),
