@@ -8,10 +8,11 @@ class BusinessServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userId = fireAll.getCurrentUserId();
+    final storeName=fireAll.searchDocuments("negocio",'userId', userId);
     print('User ID: $userId');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meus Serviços'),
+        title: Text('Serviços'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -56,6 +57,12 @@ class BusinessServicesPage extends StatelessWidget {
                         title: Text(data['name'] ?? 'Sem nome'),
                         subtitle: Text('R\$ ${data['price'].toString()}'),
                         trailing: Text(data['description'] ?? ''),
+                        onTap: () {
+                          // Ação ao clicar no serviço
+                          print('Serviço selecionado: ${data['name']}');
+                          
+                        },
+                      
                         // Colocar icons de apagar e editar
                       );
                     },

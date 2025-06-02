@@ -6,6 +6,7 @@ import 'package:yubook/pages/add_business_form.dart';
 import 'package:yubook/pages/manager/add_service_form.dart';
 import 'package:yubook/pages/manager/services_page.dart';
 import 'package:yubook/pages/registerpage.dart';
+import 'package:yubook/pages/user/booking_page.dart';
 import 'package:yubook/pages/usertype.dart';
 import 'package:yubook/theme/light_mode.dart';
 import 'firebase_options.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/add_business_form': (context) => AddBusinessFormPage(),
         '/booking_history': (context) => BookingHistoryPage(),
         '/manager_dashboard': (context) => ManagerDashboardPage(),
+        '/booking_page': (context) => const ClientAgendamentosPage(),
       },
     );
   }

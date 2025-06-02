@@ -72,6 +72,29 @@ class FirebaseServiceAll {
     }
   }
 
+// Get a specific document from Firestore
+  Future<DocumentSnapshot> getDocument(
+      String collection, String? docId) async {
+    try {
+      return await _firestore.collection(collection).doc(docId).get();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+//Search for documents in a collection
+  Future<QuerySnapshot> searchDocuments(
+      String collection, String field, String? value) async {
+    try {
+      return await _firestore
+          .collection(collection)
+          .where(field, isEqualTo: value)
+          .get();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Delete data from Firestore
   Future<void> deleteData(String collection, String docId) async {
     try {
