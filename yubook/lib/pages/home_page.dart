@@ -107,7 +107,9 @@ debugPrint(userData['tipoUser'].toString());
                   );
                 },
               ),
-        drawer: Drawer(
+        drawer: 
+        
+        Drawer(
           backgroundColor: Colors.grey,
           child: Column(
             children: [
@@ -156,6 +158,14 @@ debugPrint(userData['tipoUser'].toString());
                     style: TextStyle(color: Colors.white)),
                 onTap: () {
                   Navigator.pushNamed(context, '/booking_page');
+                },
+              ),
+                ListTile(
+                leading: const Icon(Icons.settings, color: Colors.white),
+                title: const Text('Ver Agendamentos feitos',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pushNamed(context, '/confirm_bookings_page');
                 },
               ),
               Padding(
