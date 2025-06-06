@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
 class ServiceListPage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,25 +35,32 @@ class ServiceListPage extends StatelessWidget {
             itemCount: services.length,
             itemBuilder: (context, index) {
               final service = services[index];
+              final images = (service['images'] as List?)?.cast<String>() ?? [];
+              String? randomImageUrl;
+              if (images.isNotEmpty) {
+                final random = Random(service.id.hashCode);
+                randomImageUrl = images[random.nextInt(images.length)];
+              }
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
                   leading:
-                      service['imageUrl'] != null
-                          ? Image.network(
-                            service['imageUrl'],
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
+                      randomImageUrl != null
+                          ? CircleAvatar(
+                            backgroundImage: NetworkImage(randomImageUrl),
+                            radius: 25,
                           )
-                          : const Icon(Icons.design_services, size: 50),
+                          : const CircleAvatar(
+                            child: Icon(Icons.design_services, size: 28),
+                            radius: 25,
+                          ),
                   title: Text(service['name'] ?? 'Unnamed Service'),
                   subtitle: Text(service['description'] ?? 'No description'),
-                  trailing: const Icon(Icons.arrow_forward),
                   onTap: () {
+                    // Navegar para detalhes do serviço (a ser implementado)
                     Navigator.pushNamed(
                       context,
-                      '/bookingPage',
+                      '/service_details',
                       arguments: {
                         'serviceId': service.id,
                         'negocioId':
@@ -60,6 +68,23 @@ class ServiceListPage extends StatelessWidget {
                       },
                     );
                   },
+                  trailing: ElevatedButton.icon(
+                    icon: const Icon(Icons.event_available),
+                    label: const Text('Agendar'),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/bookingPage',
+                        arguments: {
+                          'serviceId': service.id,
+                          'negocioId':
+                              service['negocioId'] ??
+                              service['businessId'] ??
+                              '',
+                        },
+                      );
+                    },
+                  ),
                 ),
               );
             },

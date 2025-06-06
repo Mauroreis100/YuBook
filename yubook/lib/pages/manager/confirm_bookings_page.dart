@@ -3,6 +3,108 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
+class ConfirmBookingsPage extends StatelessWidget {
+  const ConfirmBookingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: Text('Precisa de estar autenticado.')),
+      );
+    }
+    // Supondo que o gerente só pode ver agendamentos do seu negócio
+    // O negocioId pode ser passado via argumentos ou buscado do perfil do usuário
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final String? negocioId = args != null ? args['negocioId'] : null;
+    if (negocioId == null) {
+      return const Scaffold(
+        body: Center(child: Text('Negócio não encontrado.')),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Agendamentos do Negócio'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream:
+            FirebaseFirestore.instance
+                .collection('agendamentos')
+                .where('negocioId', isEqualTo: negocioId)
+                .orderBy('dataHora', descending: false)
+                .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('Nenhum agendamento encontrado.'));
+          }
+          final agendamentos = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: agendamentos.length,
+            itemBuilder: (context, index) {
+              final agendamento =
+                  agendamentos[index].data() as Map<String, dynamic>;
+              final dataHora = (agendamento['dataHora'] as Timestamp).toDate();
+              final estado = agendamento['estado'] ?? 'pendente';
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ListTile(
+                  leading: const Icon(Icons.event_available),
+                  title: Text('Cliente: ${agendamento['userId']}'),
+                  subtitle: Text(
+                    'Serviço: ${agendamento['servicoId']}\nData: '
+                    '${dataHora.day}/${dataHora.month}/${dataHora.year} '
+                    '${dataHora.hour.toString().padLeft(2, '0')}:${dataHora.minute.toString().padLeft(2, '0')}\n'
+                    'Estado: $estado',
+                  ),
+                  trailing:
+                      estado == 'pendente'
+                          ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.check,
+                                  color: Colors.green,
+                                ),
+                                onPressed: () async {
+                                  await agendamentos[index].reference.update({
+                                    'estado': 'confirmado',
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  await agendamentos[index].reference.update({
+                                    'estado': 'rejeitado',
+                                  });
+                                },
+                              ),
+                            ],
+                          )
+                          : null,
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
 class ManagerAgendamentosPage extends StatefulWidget {
   const ManagerAgendamentosPage({super.key});
 

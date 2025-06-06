@@ -21,10 +21,14 @@ import 'package:yubook/pages/manager/confirm_bookings_page.dart';
 import 'package:yubook/pages/user/booking_history_page.dart';
 import 'package:yubook/pages/user/booking_page.dart';
 import 'package:yubook/pages/add_business_form.dart';
+import 'package:yubook/pages/perfil.dart';
+import 'package:yubook/pages/users_page.dart';
+import 'package:yubook/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.initialize();
   runApp(const MyApp());
 }
 
@@ -35,12 +39,20 @@ class MyApp extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return LoginPage(onTap: () {});
 
-    final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    final doc =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+    if (!doc.exists) {
+      // Se o documento não existe, volta para login
+      return LoginPage(onTap: () {});
+    }
     final tipo = doc['tipoUser']?.toString().toLowerCase();
 
     if (tipo == 'admin') return const SuperAdminDashboardPage();
     if (tipo == 'gestor') return const ManagerDashboardPage();
-    if (tipo == 'Cliente') return  HomePage();
+    if (tipo == 'cliente') return HomePage();
 
     return HomePage();
   }
@@ -52,7 +64,7 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const MaterialApp(
-            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+            home: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -61,7 +73,9 @@ class MyApp extends StatelessWidget {
           title: 'YuBook',
           theme: lightMode,
           darkTheme: darkMode,
-          home: snapshot.data!,
+          home:
+              snapshot.data ??
+              const Center(child: Text('Erro ao carregar app')),
           routes: {
             '/loginpage': (context) => LoginPage(onTap: () {}),
             '/register': (context) => RegisterPage(onTap: () {}),
@@ -74,9 +88,12 @@ class MyApp extends StatelessWidget {
             '/add_business_form': (context) => AddBusinessFormPage(),
             '/booking_history': (context) => BookingHistoryPage(),
             '/booking_page': (context) => const ClientAgendamentosPage(),
-            '/confirm_bookings_page': (context) => const ManagerAgendamentosPage(),
+            '/confirm_bookings_page':
+                (context) => const ManagerAgendamentosPage(),
             '/userManager': (context) => const UserManagerPage(),
             '/business_list': (context) => const AdminEmpresaListPage(),
+            '/perfil': (context) => const PerfilPage(),
+            '/users': (context) => const UsersPage(),
           },
         );
       },

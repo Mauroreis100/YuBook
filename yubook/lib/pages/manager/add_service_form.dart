@@ -1,25 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yubook/services/firebase_service.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
 class AddServicePage extends StatefulWidget {
   @override
   _AddServicePageState createState() => _AddServicePageState();
 }
 
 class _AddServicePageState extends State<AddServicePage> {
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
 
- final FirebaseServiceAll fireAll = FirebaseServiceAll();
+  final FirebaseServiceAll fireAll = FirebaseServiceAll();
+  List<File> _selectedImages = [];
+
   void _saveService() {
     if (_formKey.currentState!.validate()) {
       final String nome = _nomeController.text;
       final String descricao = _descricaoController.text;
       final double preco = double.tryParse(_precoController.text) ?? 0.0;
-      
 
       // TODO: Add logic to save the service (e.g., API call or database operation)
 
@@ -32,16 +35,13 @@ class _AddServicePageState extends State<AddServicePage> {
       _nomeController.clear();
       _descricaoController.clear();
       _precoController.clear();
-     
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Adicionar Serviço'),
-      ),
+      appBar: AppBar(title: Text('Adicionar Serviço')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -82,47 +82,126 @@ class _AddServicePageState extends State<AddServicePage> {
                   return null;
                 },
               ),
-            
-            
+              // Campo para selecionar até 3 imagens
+              SizedBox(height: 16),
+              Text('Imagens do serviço (máx. 3):'),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  ..._selectedImages.map(
+                    (img) => Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipOval(
+                            child: Image.file(
+                              img,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedImages.remove(img);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_selectedImages.length < 3)
+                    GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final pickedFile = await picker.pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        if (pickedFile != null) {
+                          setState(() {
+                            _selectedImages.add(File(pickedFile.path));
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.add_a_photo, color: Colors.grey[700]),
+                      ),
+                    ),
+                ],
+              ),
+
               SizedBox(height: 20),
-           ElevatedButton(
-  onPressed: () async {
-    if (_formKey.currentState!.validate()) {
-      final userId = fireAll.getCurrentUserId();
-      if (userId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Usuário não autenticado')),
-        );
-        return;
-      }
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final userId = fireAll.getCurrentUserId();
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Usuário não autenticado')),
+                      );
+                      return;
+                    }
 
-      final serviceData = {
-        'empresaId': userId,
-        'name': _nomeController.text,
-        'price': double.tryParse(_precoController.text) ?? 0.0,
-        'description': _descricaoController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-      };
+                    // Upload das imagens
+                    List<String> imageUrls = [];
+                    for (var img in _selectedImages) {
+                      final url = await fireAll.uploadImage(
+                        img,
+                        'servicos/${DateTime.now().millisecondsSinceEpoch}_${img.path.split('/').last}',
+                      );
+                      imageUrls.add(url);
+                    }
 
-      try {
-        fireAll.addData('servicos', serviceData);
+                    final serviceData = {
+                      'empresaId': userId,
+                      'name': _nomeController.text,
+                      'price': double.tryParse(_precoController.text) ?? 0.0,
+                      'description': _descricaoController.text,
+                      'images': imageUrls,
+                      'createdAt': FieldValue.serverTimestamp(),
+                    };
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Serviço adicionado com sucesso')),
-        );
+                    try {
+                      fireAll.addData('servicos', serviceData);
 
-        Navigator.pop(context);
-        
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao adicionar serviço: $e')),
-        );
-      }
-    }
-  },
-  child: Text('Salvar Serviço'),
-),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Serviço adicionado com sucesso'),
+                        ),
+                      );
 
+                      Navigator.pop(context);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Erro ao adicionar serviço: $e'),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Text('Salvar Serviço'),
+              ),
             ],
           ),
         ),

@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class FirebaseServiceAll {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -72,9 +74,8 @@ class FirebaseServiceAll {
     }
   }
 
-// Get a specific document from Firestore
-  Future<DocumentSnapshot> getDocument(
-      String collection, String? docId) async {
+  // Get a specific document from Firestore
+  Future<DocumentSnapshot> getDocument(String collection, String? docId) async {
     try {
       return await _firestore.collection(collection).doc(docId).get();
     } catch (e) {
@@ -82,9 +83,12 @@ class FirebaseServiceAll {
     }
   }
 
-//Search for documents in a collection
+  //Search for documents in a collection
   Future<QuerySnapshot> searchDocuments(
-      String collection, String field, String? value) async {
+    String collection,
+    String field,
+    String? value,
+  ) async {
     try {
       return await _firestore
           .collection(collection)
@@ -119,6 +123,45 @@ class FirebaseServiceAll {
         credential,
       );
       return userCredential.user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Booking: criar agendamento
+  Future<void> createBooking(Map<String, dynamic> data) async {
+    try {
+      await _firestore.collection('agendamentos').add(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Booking: buscar agendamentos de um usuário
+  Stream<QuerySnapshot> getUserBookings(String userId) {
+    return _firestore
+        .collection('agendamentos')
+        .where('userId', isEqualTo: userId)
+        .orderBy('dataHora', descending: false)
+        .snapshots();
+  }
+
+  // Booking: buscar agendamentos de um negócio
+  Stream<QuerySnapshot> getBusinessBookings(String negocioId) {
+    return _firestore
+        .collection('agendamentos')
+        .where('negocioId', isEqualTo: negocioId)
+        .orderBy('dataHora', descending: false)
+        .snapshots();
+  }
+
+  // Upload de imagem para o Firebase Storage
+  Future<String> uploadImage(File imageFile, String path) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child(path);
+      final uploadTask = await storageRef.putFile(imageFile);
+      final url = await uploadTask.ref.getDownloadURL();
+      return url;
     } catch (e) {
       rethrow;
     }
