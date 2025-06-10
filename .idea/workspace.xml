@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="06472f09-0db6-44e7-b499-93ee7a5b2bab" name="Changes" comment="aplicativo pronto. First release">
+      <change beforePath="$PROJECT_DIR$/yubook/android/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/android/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/components/hamburguer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/components/hamburguer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/add_business_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/add_business_form.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/admin/admin_dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/admin/admin_dashboard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/admin/business_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/admin/business_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/admin/hamburguer_admin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/admin/hamburguer_admin.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/admin/userManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/admin/userManager.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/loginpage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/loginpage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/manager/add_service_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/manager/add_service_form.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/manager/admin_dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/manager/admin_dashboard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/manager/confirm_bookings_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/manager/confirm_bookings_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/manager/manager_dashboard_page.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/manager/services_page.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/perfil.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/perfil.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/registerpage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/registerpage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/service_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/service_detail.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/user/booking_history_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/user/booking_history_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/user/booking_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/user/booking_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/user/service_list_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/user/service_list_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/users_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/users_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/pages/usertype.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/pages/usertype.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/lib/services/notification_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/lib/services/notification_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yubook/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/yubook/windows/flutter/generated_plugins.cmake" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="type-of-user" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Alak4y&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Mauroreis100/YuBook.git&quot;,
+    &quot;accountId&quot;: &quot;258809ac-8f1a-4d33-a160-26ffc7eb622a&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2wnptUuwv0l4V5b1gagUEKPNjez" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.home_page.dart.executor&quot;: &quot;Run&quot;,
+    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;android.gradle.sync.needed&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;servicos&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/amade/StudioProjects/YuBook/yubook/android/settings.gradle.kts&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.CommitDialog&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\amade\StudioProjects\YuBook\yubook\lib\pages" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Flutter.home_page.dart">
+    <configuration name="home_page.dart" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/yubook/lib/pages/home_page.dart" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/yubook/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Flutter.main.dart" />
+        <item itemvalue="Flutter.home_page.dart" />
+        <item itemvalue="Flutter.main.dart" />
+        <item itemvalue="Flutter.home_page.dart" />
+        <item itemvalue="Flutter.home_page.dart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="06472f09-0db6-44e7-b499-93ee7a5b2bab" name="Changes" comment="" />
+      <created>1746687407073</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746687407073</updated>
+    </task>
+    <task id="LOCAL-00001" summary="init">
+      <option name="closed" value="true" />
+      <created>1746688017714</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746688017714</updated>
+    </task>
+    <task id="LOCAL-00002" summary="arquivos de configuracao, firebase.json,firebase_options.dart,google-services.json">
+      <option name="closed" value="true" />
+      <created>1746698395612</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746698395612</updated>
+    </task>
+    <task id="LOCAL-00003" summary="pagina de login, com arquivos separados, componentes textfield e button reutilizaveis">
+      <option name="closed" value="true" />
+      <created>1746707273755</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746707273755</updated>
+    </task>
+    <task id="LOCAL-00004" summary="pagina de login, com arquivos separados, componentes textfield e button reutilizaveis, ainda sem funcionalidade, apenas a tela definida com tema light e dark, que muda de acordo com o tema do celular.">
+      <option name="closed" value="true" />
+      <created>1746754184045</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746754184045</updated>
+    </task>
+    <task id="LOCAL-00005" summary="pagina de login, register, com toggle entre login e register, se nao tem conta vai pra pagina de registrar, caso tenha faz login. depois entra no app e vai pra homepage, que tem botao de logout que devolve o user para a login page.">
+      <option name="closed" value="true" />
+      <created>1746761846217</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746761846217</updated>
+    </task>
+    <task id="LOCAL-00006" summary="google sign in implemented">
+      <option name="closed" value="true" />
+      <created>1748254261212</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1748254261297</updated>
+    </task>
+    <task id="LOCAL-00007" summary="user faz agendamento,gestor ve os agendamentos">
+      <option name="closed" value="true" />
+      <created>1748255479947</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1748255479947</updated>
+    </task>
+    <task id="LOCAL-00008" summary="notificacao implementada">
+      <option name="closed" value="true" />
+      <created>1749201134732</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749201134732</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/login" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <MESSAGE value="arquivos de configuracao, firebase.json,firebase_options.dart,google-services.json" />
+    <MESSAGE value="pagina de login, com arquivos separados, componentes textfield e button reutilizaveis" />
+    <MESSAGE value="pagina de login, com arquivos separados, componentes textfield e button reutilizaveis, ainda sem funcionalidade, apenas a tela definida com tema light e dark, que muda de acordo com o tema do celular." />
+    <MESSAGE value="pagina de login, register, com toggle entre login e register, se nao tem conta vai pra pagina de registrar, caso tenha faz login. depois entra no app e vai pra homepage, que tem botao de logout que devolve o user para a login page." />
+    <MESSAGE value="google sign in implemented" />
+    <MESSAGE value="user faz agendamento,gestor ve os agendamentos" />
+    <MESSAGE value="notificacao implementada" />
+    <MESSAGE value="aplicativo pronto. First release" />
+    <option name="LAST_COMMIT_MESSAGE" value="aplicativo pronto. First release" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/yubook/lib/main.dart</url>
+          <line>74</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/yubook/lib/main.dart</url>
+          <line>70</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
