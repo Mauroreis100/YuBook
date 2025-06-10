@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yubook/pages/admin/hamburguer_admin.dart';
+import 'package:yubook/components/custom_drawer.dart';
 
 class UserManagerPage extends StatefulWidget {
   const UserManagerPage({super.key});
@@ -15,25 +16,33 @@ class _UserManagerPageState extends State<UserManagerPage> {
   String _selectedRole = 'todos';
 
   Future<void> _updateRole(String userId, String newRole) async {
-    await _firestore.collection('users').doc(userId).update({'tipoUser': newRole});
+    await _firestore.collection('users').doc(userId).update({
+      'tipoUser': newRole,
+    });
   }
 
   Future<void> _toggleStatus(String userId, bool currentStatus) async {
-    await _firestore.collection('users').doc(userId).update({'ativo': !currentStatus});
+    await _firestore.collection('users').doc(userId).update({
+      'ativo': !currentStatus,
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final stream = _selectedRole == 'todos'
-        ? _firestore.collection('users').snapshots()
-        : _firestore
-            .collection('users')
-            .where('tipoUser', isEqualTo: _selectedRole)
-            .snapshots();
+    final stream =
+        _selectedRole == 'todos'
+            ? _firestore.collection('users').snapshots()
+            : _firestore
+                .collection('users')
+                .where('tipoUser', isEqualTo: _selectedRole)
+                .snapshots();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestão de Utilizadores'),
+        title: Text(
+          'Gestão de Utilizadores',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         actions: [
           DropdownButton<String>(
             value: _selectedRole,
@@ -47,16 +56,18 @@ class _UserManagerPageState extends State<UserManagerPage> {
             onChanged: (value) {
               setState(() => _selectedRole = value!);
             },
-          )
+          ),
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: stream,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData)
+            return const Center(child: CircularProgressIndicator());
 
           final docs = snapshot.data!.docs;
-          if (docs.isEmpty) return const Center(child: Text('Nenhum utilizador encontrado.'));
+          if (docs.isEmpty)
+            return const Center(child: Text('Nenhum utilizador encontrado.'));
 
           return ListView.builder(
             itemCount: docs.length,
@@ -79,7 +90,9 @@ class _UserManagerPageState extends State<UserManagerPage> {
                       Text(email),
                       Text('Perfil: $role'),
                       if (criado != null)
-                        Text('Criado em: ${DateFormat('dd/MM/yyyy').format(criado)}'),
+                        Text(
+                          'Criado em: ${DateFormat('dd/MM/yyyy').format(criado)}',
+                        ),
                       Text('Estado: ${ativo ? 'Ativo' : 'Desativado'}'),
                     ],
                   ),
@@ -92,13 +105,26 @@ class _UserManagerPageState extends State<UserManagerPage> {
                         _updateRole(id, value);
                       }
                     },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(value: 'admin', child: const Text('Tornar Admin')),
-                      PopupMenuItem(value: 'gestor', child: const Text('Tornar Gestor')),
-                      PopupMenuItem(value: 'cliente', child: const Text('Tornar Cliente')),
-                      const PopupMenuDivider(),
-                      PopupMenuItem(value: 'toggle', child: Text(ativo ? 'Desativar' : 'Ativar')),
-                    ],
+                    itemBuilder:
+                        (context) => [
+                          PopupMenuItem(
+                            value: 'admin',
+                            child: const Text('Tornar Admin'),
+                          ),
+                          PopupMenuItem(
+                            value: 'gestor',
+                            child: const Text('Tornar Gestor'),
+                          ),
+                          PopupMenuItem(
+                            value: 'cliente',
+                            child: const Text('Tornar Cliente'),
+                          ),
+                          const PopupMenuDivider(),
+                          PopupMenuItem(
+                            value: 'toggle',
+                            child: Text(ativo ? 'Desativar' : 'Ativar'),
+                          ),
+                        ],
                   ),
                 ),
               );
@@ -106,7 +132,7 @@ class _UserManagerPageState extends State<UserManagerPage> {
           );
         },
       ),
-      drawer: HamburguerMenuAdmin(),
+      drawer: CustomDrawer(tipoUser: 'admin'),
     );
   }
 }

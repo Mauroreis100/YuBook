@@ -7,16 +7,13 @@ class HamburguerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.grey,
-      
+
       child: Column(
         children: [
           DrawerHeader(
             child: Text(
               'YUBOOK',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
           ),
           ListTile(
@@ -38,30 +35,33 @@ class HamburguerMenu extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
-            title: Text('Adicionar Serviço', style: TextStyle(color: Colors.white)),
+            title: Text(
+              'Adicionar Serviço',
+              style: TextStyle(color: Colors.white),
+            ),
             onTap: () {
               // Navegar para a página de configurações
               Navigator.pop(context);
-               Navigator.pushNamed(context, '/services_page');
+              Navigator.pushNamed(context, '/services_page');
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
             title: Text('Ver Serviços', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navegar para a página de configurações
-              Navigator.pop(context,  '/services_view');
+              Navigator.pop(context, '/services_view');
             },
           ),
- ListTile(
+          ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
             title: Text('Ver Serviços', style: TextStyle(color: Colors.white)),
             onTap: () {
               // Navegar para a página de configurações
-              Navigator.pop(context,  '/services_page');
+              Navigator.pop(context, '/home_page');
             },
           ),
-          
+
           Padding(
             padding: const EdgeInsets.only(left: 25.0),
             child: ListTile(
@@ -89,15 +89,18 @@ class HamburguerMenu extends StatelessWidget {
             padding: const EdgeInsets.only(left: 25.0),
             child: ListTile(
               leading: Icon(Icons.info, color: Colors.white),
-              title: Text('aDD BUSINESS form', style: TextStyle(color: Colors.white)),
+              title: Text(
+                'aDD BUSINESS form',
+                style: TextStyle(color: Colors.white),
+              ),
               onTap: () {
                 // Navegar para a página sobre
                 Navigator.pop(context);
-                  Navigator.pushNamed(context, '/add_business_form');
+                Navigator.pushNamed(context, '/add_business_form');
               },
             ),
           ),
-           Padding(
+          Padding(
             padding: const EdgeInsets.only(left: 25.0),
             child: ListTile(
               leading: Icon(Icons.info, color: Colors.white),
@@ -105,7 +108,7 @@ class HamburguerMenu extends StatelessWidget {
               onTap: () {
                 // Navegar para a página sobre
                 Navigator.pop(context);
-                  Navigator.pushNamed(context, '/loginpage');
+                Navigator.pushNamed(context, '/loginpage');
               },
             ),
           ),

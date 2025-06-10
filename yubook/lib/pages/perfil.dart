@@ -75,7 +75,7 @@ class _PerfilPageState extends State<PerfilPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu Perfil'),
+        title: Text("Perfil", style: Theme.of(context).textTheme.titleLarge),
         actions: [
           IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
         ],
@@ -85,16 +85,24 @@ class _PerfilPageState extends State<PerfilPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_tipoUser == 'gestor' &&
-                _negocioImageUrl != null &&
-                _negocioImageUrl!.isNotEmpty)
-              Center(
-                child: CircleAvatar(
-                  radius: 48,
-                  backgroundImage: NetworkImage(_negocioImageUrl!),
-                ),
-              ),
-            if (_tipoUser == 'gestor') const SizedBox(height: 16),
+            Center(
+              child:
+                  _negocioImageUrl != null && _negocioImageUrl!.isNotEmpty
+                      ? CircleAvatar(
+                        radius: 48,
+                        backgroundImage: NetworkImage(_negocioImageUrl!),
+                      )
+                      : CircleAvatar(
+                        radius: 48,
+                        backgroundColor: Colors.grey[300],
+                        child: Icon(
+                          Icons.person,
+                          size: 48,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+            ),
+            const SizedBox(height: 16),
             TextField(
               controller: _nomeController,
               decoration: const InputDecoration(labelText: 'Nome'),
@@ -108,9 +116,11 @@ class _PerfilPageState extends State<PerfilPage> {
             const SizedBox(height: 16),
             Text('Tipo de usuário: ${_tipoUser ?? ''}'),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _saveProfile,
-              child: const Text('Salvar Alterações'),
+            Center(
+              child: ElevatedButton(
+                onPressed: _saveProfile,
+                child: const Text('Salvar Alterações'),
+              ),
             ),
           ],
         ),

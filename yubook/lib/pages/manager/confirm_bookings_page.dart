@@ -26,7 +26,10 @@ class ConfirmBookingsPage extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agendamentos do Negócio'),
+        title: Text(
+          'Agendamentos',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -109,7 +112,8 @@ class ManagerAgendamentosPage extends StatefulWidget {
   const ManagerAgendamentosPage({super.key});
 
   @override
-  State<ManagerAgendamentosPage> createState() => _ManagerAgendamentosPageState();
+  State<ManagerAgendamentosPage> createState() =>
+      _ManagerAgendamentosPageState();
 }
 
 class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
@@ -120,7 +124,8 @@ class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
     super.initState();
     empresaId = FirebaseAuth.instance.currentUser?.uid;
   }
-//Podes usar set
+
+  //Podes usar set
   Future<void> _atualizarStatus(String agendamentoId, String novoStatus) async {
     await FirebaseFirestore.instance
         .collection('agendamentos')
@@ -136,10 +141,11 @@ class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
       );
     }
 
-    final agendamentosStream = FirebaseFirestore.instance
-        .collection('agendamentos')
-        .where('empresaId', isEqualTo: empresaId)
-        .snapshots();
+    final agendamentosStream =
+        FirebaseFirestore.instance
+            .collection('agendamentos')
+            .where('empresaId', isEqualTo: empresaId)
+            .snapshots();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Agendamentos da Empresa')),
@@ -163,7 +169,8 @@ class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
               final data = agendamento.data() as Map<String, dynamic>;
               final servico = data['servico'] ?? {};
               final status = data['status'] ?? 'pendente';
-              final DateTime? agendadoPara = (data['agendadoPara'] as Timestamp?)?.toDate();
+              final DateTime? agendadoPara =
+                  (data['agendadoPara'] as Timestamp?)?.toDate();
 
               return Card(
                 margin: const EdgeInsets.all(8),
@@ -174,7 +181,9 @@ class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
                     children: [
                       Text('Preço: R\$ ${servico['preco'] ?? '-'}'),
                       if (agendadoPara != null)
-                        Text('Agendado para: ${DateFormat('dd/MM/yyyy – HH:mm').format(agendadoPara)}'),
+                        Text(
+                          'Agendado para: ${DateFormat('dd/MM/yyyy – HH:mm').format(agendadoPara)}',
+                        ),
                       Text('Status atual: $status'),
                     ],
                   ),
@@ -183,24 +192,25 @@ class _ManagerAgendamentosPageState extends State<ManagerAgendamentosPage> {
                     onSelected: (String novoStatus) {
                       _atualizarStatus(agendamento.id, novoStatus);
                     },
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      const PopupMenuItem<String>(
-                        value: 'pendente',
-                        child: Text('Pendente'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'confirmado',
-                        child: Text('Confirmado'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'concluido',
-                        child: Text('Concluído'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'cancelado',
-                        child: Text('Cancelado'),
-                      ),
-                    ],
+                    itemBuilder:
+                        (BuildContext context) => <PopupMenuEntry<String>>[
+                          const PopupMenuItem<String>(
+                            value: 'pendente',
+                            child: Text('Pendente'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'confirmado',
+                            child: Text('Confirmado'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'concluido',
+                            child: Text('Concluído'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'cancelado',
+                            child: Text('Cancelado'),
+                          ),
+                        ],
                   ),
                 ),
               );

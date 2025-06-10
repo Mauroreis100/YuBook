@@ -14,9 +14,7 @@ import 'package:yubook/pages/registerpage.dart';
 import 'package:yubook/pages/usertype.dart';
 import 'package:yubook/pages/home_page.dart';
 import 'package:yubook/pages/admin/admin_dashboard.dart';
-import 'package:yubook/pages/manager/manager_dashboard_page.dart';
 import 'package:yubook/pages/manager/add_service_form.dart';
-import 'package:yubook/pages/manager/services_page.dart';
 import 'package:yubook/pages/manager/confirm_bookings_page.dart';
 import 'package:yubook/pages/user/booking_history_page.dart';
 import 'package:yubook/pages/user/booking_page.dart';
@@ -24,11 +22,55 @@ import 'package:yubook/pages/add_business_form.dart';
 import 'package:yubook/pages/perfil.dart';
 import 'package:yubook/pages/users_page.dart';
 import 'package:yubook/services/notification_service.dart';
+import 'package:yubook/pages/manager/edit_service_page.dart';
+import 'package:yubook/pages/manager/meus_servicos_page.dart';
+import 'package:yubook/pages/user/service_details_page.dart';
+import 'package:yubook/pages/manager/service_bookings_page.dart';
+import 'package:yubook/pages/user/client_bookings_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:yubook/pages/manager/admin_dashboard.dart';
+
+final ThemeData yuBookTheme = ThemeData(
+  primaryColor: const Color(0xFF619bfb),
+  scaffoldBackgroundColor: Colors.white,
+  colorScheme: ColorScheme.light(
+    primary: Color(0xFF619bfb),
+    secondary: Color(0xFF7db4fc),
+    background: Color(0xFFcffeff),
+    error: Color(0xFFFF4F4F),
+  ),
+  textTheme: GoogleFonts.chewyTextTheme().copyWith(
+    bodyMedium: GoogleFonts.chewy(color: Color(0xFF22223B)),
+    titleLarge: GoogleFonts.chewy(fontSize: 24, color: Color(0xFF619bfb)),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF619bfb),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      textStyle: GoogleFonts.chewy(fontSize: 18),
+    ),
+  ),
+  cardTheme: CardTheme(
+    color: Colors.white,
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    margin: const EdgeInsets.all(8),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF619bfb)),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    labelStyle: GoogleFonts.chewy(color: Color(0xFF619bfb)),
+  ),
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NotificationService.initialize();
+  // await NotificationService.initialize();
   runApp(const MyApp());
 }
 
@@ -48,12 +90,7 @@ class MyApp extends StatelessWidget {
       // Se o documento não existe, volta para login
       return LoginPage(onTap: () {});
     }
-    final tipo = doc['tipoUser']?.toString().toLowerCase();
-
-    if (tipo == 'admin') return const SuperAdminDashboardPage();
-    if (tipo == 'gestor') return const ManagerDashboardPage();
-    if (tipo == 'cliente') return HomePage();
-
+    // Todos os usuários vão para HomePage (lista geral de serviços)
     return HomePage();
   }
 
@@ -71,8 +108,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'YuBook',
-          theme: lightMode,
-          darkTheme: darkMode,
+          theme: yuBookTheme,
           home:
               snapshot.data ??
               const Center(child: Text('Erro ao carregar app')),
@@ -82,9 +118,14 @@ class MyApp extends StatelessWidget {
             '/usertype': (context) => UserTypePage(),
             '/home_page': (context) => HomePage(),
             '/admin_dashboard': (context) => const SuperAdminDashboardPage(),
-            '/manager_dashboard': (context) => const ManagerDashboardPage(),
             '/add_service_form': (context) => AddServicePage(),
-            '/services_page': (context) => BusinessServicesPage(),
+            '/edit_service_form': (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>?;
+              final serviceId = args != null ? args['serviceId'] as String : '';
+              return EditServicePage(serviceId: serviceId);
+            },
             '/add_business_form': (context) => AddBusinessFormPage(),
             '/booking_history': (context) => BookingHistoryPage(),
             '/booking_page': (context) => const ClientAgendamentosPage(),
@@ -94,6 +135,30 @@ class MyApp extends StatelessWidget {
             '/business_list': (context) => const AdminEmpresaListPage(),
             '/perfil': (context) => const PerfilPage(),
             '/users': (context) => const UsersPage(),
+            '/meus_servicos': (context) => const MeusServicosPage(),
+            '/service_details': (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>?;
+              final serviceId =
+                  args != null ? args['serviceId'] as String : null;
+              return ServiceDetailsPage();
+            },
+            '/service_bookings': (context) {
+              final args =
+                  ModalRoute.of(context)?.settings.arguments
+                      as Map<String, dynamic>?;
+              final serviceId =
+                  args != null ? args['serviceId'] as String : null;
+              final serviceName =
+                  args != null ? args['serviceName'] as String : '';
+              return ServiceBookingsPage(
+                serviceId: serviceId,
+                serviceName: serviceName,
+              );
+            },
+            '/client_bookings': (context) => const ClientBookingsPage(),
+            '/manager_dashboard': (context) => const ManagerDashboardPage(),
           },
         );
       },

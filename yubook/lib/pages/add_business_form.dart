@@ -24,7 +24,12 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Adicionar Negócio')),
+      appBar: AppBar(
+        title: Text(
+          'Adicionar Negócio',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -41,6 +46,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _openingTimeController,
                 decoration: InputDecoration(
@@ -57,6 +63,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   }
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _closingTimeController,
                 decoration: InputDecoration(
@@ -73,6 +80,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   }
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),
@@ -86,6 +94,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _phoneController,
                 decoration: InputDecoration(labelText: 'Telefone'),
@@ -96,6 +105,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _locationController,
                 decoration: InputDecoration(labelText: 'Localização'),

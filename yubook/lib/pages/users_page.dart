@@ -40,7 +40,7 @@ class _UsersPageState extends State<UsersPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Usuários'),
+        title: Text('Usuários', style: Theme.of(context).textTheme.titleLarge),
         actions: [
           DropdownButton<String>(
             value: _selectedRole,

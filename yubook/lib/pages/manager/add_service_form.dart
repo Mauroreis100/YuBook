@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yubook/services/firebase_service.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AddServicePage extends StatefulWidget {
   @override
@@ -38,10 +39,29 @@ class _AddServicePageState extends State<AddServicePage> {
     }
   }
 
+  Future<bool> checarPermissaoGaleria() async {
+    var status = await Permission.photos.status;
+    if (!status.isGranted) {
+      status = await Permission.photos.request();
+    }
+    if (status.isGranted) return true;
+    // Para Androids antigos, tente storage
+    status = await Permission.storage.status;
+    if (!status.isGranted) {
+      status = await Permission.storage.request();
+    }
+    return status.isGranted;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Adicionar Serviço')),
+      appBar: AppBar(
+        title: Text(
+          'Adicionar Serviço',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -58,6 +78,7 @@ class _AddServicePageState extends State<AddServicePage> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _descricaoController,
                 decoration: InputDecoration(labelText: 'Descrição'),
@@ -68,6 +89,7 @@ class _AddServicePageState extends State<AddServicePage> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _precoController,
                 decoration: InputDecoration(labelText: 'Preço'),
@@ -127,14 +149,24 @@ class _AddServicePageState extends State<AddServicePage> {
                   if (_selectedImages.length < 3)
                     GestureDetector(
                       onTap: () async {
-                        final picker = ImagePicker();
-                        final pickedFile = await picker.pickImage(
-                          source: ImageSource.gallery,
-                        );
-                        if (pickedFile != null) {
-                          setState(() {
-                            _selectedImages.add(File(pickedFile.path));
-                          });
+                        if (await checarPermissaoGaleria()) {
+                          final picker = ImagePicker();
+                          final pickedFile = await picker.pickImage(
+                            source: ImageSource.gallery,
+                          );
+                          if (pickedFile != null) {
+                            setState(() {
+                              _selectedImages.add(File(pickedFile.path));
+                            });
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Permissão para acessar fotos/arquivos negada.',
+                              ),
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -165,11 +197,29 @@ class _AddServicePageState extends State<AddServicePage> {
                     // Upload das imagens
                     List<String> imageUrls = [];
                     for (var img in _selectedImages) {
-                      final url = await fireAll.uploadImage(
-                        img,
-                        'servicos/${DateTime.now().millisecondsSinceEpoch}_${img.path.split('/').last}',
-                      );
-                      imageUrls.add(url);
+                      try {
+                        print('Preparando upload:');
+                        print('  Path local: ${img.path}');
+                        print('  Arquivo existe? ${img.existsSync()}');
+                        print('  UID do usuário: ${userId}');
+                        final storagePath =
+                            'servicos/$userId/${DateTime.now().millisecondsSinceEpoch}_${img.path.split('/').last}';
+                        print('  Path no Storage: $storagePath');
+                        final url = await fireAll.uploadImage(img, storagePath);
+                        imageUrls.add(url);
+                        print('Upload concluído. URL: $url');
+                      } catch (e, stack) {
+                        print('Erro ao fazer upload: ${e.toString()}');
+                        print(stack);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Erro ao fazer upload da imagem: ${e.toString()}',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
                     }
 
                     final serviceData = {

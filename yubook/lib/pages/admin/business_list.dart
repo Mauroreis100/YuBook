@@ -14,7 +14,12 @@ class AdminEmpresaListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Negócios Cadastrados')),
+      appBar: AppBar(
+        title: Text(
+          'Negócios Cadastrados',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('negocio').snapshots(),
         builder: (context, snapshot) {

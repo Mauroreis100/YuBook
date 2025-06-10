@@ -7,16 +7,13 @@ class HamburguerMenuAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.grey,
-      
+
       child: Column(
         children: [
           DrawerHeader(
             child: Text(
               'YUBOOK',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 24),
             ),
           ),
           ListTile(
@@ -37,7 +34,7 @@ class HamburguerMenuAdmin extends StatelessWidget {
               Navigator.pushNamed(context, '/userManager');
             },
           ),
-  
+
           Padding(
             padding: const EdgeInsets.only(left: 25.0),
             child: ListTile(
@@ -61,8 +58,6 @@ class HamburguerMenuAdmin extends StatelessWidget {
               },
             ),
           ),
-       
-    
         ],
       ),
     );
