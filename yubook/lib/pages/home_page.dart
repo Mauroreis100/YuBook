@@ -1,145 +1,56 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:yubook/services/firebase_service.dart';
+import 'package:yubook/components/custom_drawer.dart';
+import 'package:yubook/pages/user/service_list_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatelessWidget {
-  final FirebaseServiceAll fireAll = FirebaseServiceAll();
-
   HomePage({super.key});
 
-  void logout(context) {
+  void logout(BuildContext context) {
     FirebaseAuth.instance.signOut();
-    // Navigate to the login page
     Navigator.pushNamedAndRemoveUntil(context, '/loginpage', (route) => false);
   }
 
+  @override
   Widget build(BuildContext context) {
-    final userId = fireAll.getCurrentUserId();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text("Home")),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.event),
-              tooltip: 'Meus Agendamentos',
-              onPressed: () {
-                Navigator.pushNamed(context, '/booking_history');
-              },
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: Text('Usuário não autenticado.')),
+      );
+    }
+    return FutureBuilder<DocumentSnapshot>(
+      future:
+          FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Scaffold(
+            body: Center(child: Text('Usuário não encontrado.')),
+          );
+        }
+        final data = snapshot.data!.data() as Map<String, dynamic>?;
+        final tipoUser = data?['tipoUser']?.toString() ?? '';
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(
+              'Home',
+              style: GoogleFonts.chewy(color: Color(0xFF1976D2), fontSize: 28),
             ),
-            IconButton(
-              onPressed: () => logout(context),
-              icon: Icon(Icons.logout),
-            ),
-          ],
-        ),
-        body:
-            userId == null
-                ? Center(child: Text('Usuário não autenticado'))
-                : StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance
-                          .collection('servicos')
-                          .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Erro ao carregar dados'));
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-
-                    final docs = snapshot.data!.docs;
-                    if (docs.isEmpty) {
-                      return Center(child: Text('Nenhum serviço encontrado'));
-                    }
-
-                    return ListView.builder(
-                      itemCount: docs.length,
-                      itemBuilder: (context, index) {
-                        final data = docs[index].data() as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(data['name'] ?? 'Sem nome'),
-                          subtitle: Text('R\$ ${data['price'].toString()}'),
-                          trailing: Text(data['description'] ?? ''),
-                          // Colocar icons de apagar e editar
-                        );
-                      },
-                    );
-                  },
-                ),
-        drawer: Drawer(
-          backgroundColor: Colors.grey,
-
-          child: Column(
-            children: [
-              DrawerHeader(
-                child: Text(
-                  'YUBOOK',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.home, color: Colors.white),
-                title: Text('Home', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  // Navegar para a página inicial
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/home_page');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.add, color: Colors.white),
-                title: Text(
-                  'Add Business',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  // Navegar para a página inicial
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/add_business_form');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.white),
-                title: Text(
-                  'Adicionar Serviço',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  // Navegar para a página de configurações
-                  Navigator.pushNamed(context, '/add_service_form');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.white),
-                title: Text(
-                  'Ver Serviço',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  // Navegar para a página de configurações
-                  Navigator.pushNamed(context, '/services_page');
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: ListTile(
-                  leading: Icon(Icons.info, color: Colors.white),
-                  title: Text('Sobre', style: TextStyle(color: Colors.white)),
-                  onTap: () {
-                    // Navegar para a página sobre
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
+            iconTheme: IconThemeData(color: Color(0xFF1976D2)),
+            elevation: 2,
           ),
-        ),
-      ),
+          drawer: CustomDrawer(tipoUser: tipoUser),
+          body: ServiceListPage(tipoUser: tipoUser),
+        );
+      },
     );
   }
 }

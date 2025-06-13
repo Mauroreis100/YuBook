@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yubook/services/firebase_service.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class AddBusinessFormPage extends StatefulWidget {
   @override
@@ -15,14 +17,19 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  String? _profilePhoto;
+  File? _selectedImage;
 
   final FirebaseServiceAll fireAll = FirebaseServiceAll();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Adicionar Negócio')),
+      appBar: AppBar(
+        title: Text(
+          'Adicionar Negócio',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -39,6 +46,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _openingTimeController,
                 decoration: InputDecoration(
@@ -55,6 +63,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   }
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _closingTimeController,
                 decoration: InputDecoration(
@@ -71,6 +80,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   }
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),
@@ -84,6 +94,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _phoneController,
                 decoration: InputDecoration(labelText: 'Telefone'),
@@ -94,6 +105,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _locationController,
                 decoration: InputDecoration(labelText: 'Localização'),
@@ -107,29 +119,39 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
               SizedBox(height: 16),
               GestureDetector(
                 onTap: () async {
-                  // Logic to pick a profile photo
-                  // For now, just simulate picking a photo
-                  setState(() {
-                    _profilePhoto = 'Foto de perfil selecionada';
-                  });
+                  final picker = ImagePicker();
+                  final pickedFile = await picker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (pickedFile != null) {
+                    setState(() {
+                      _selectedImage = File(pickedFile.path);
+                    });
+                  }
                 },
                 child: Container(
                   height: 150,
                   width: double.infinity,
                   color: Colors.grey[300],
                   child:
-                      _profilePhoto == null
+                      _selectedImage == null
                           ? Center(
                             child: Text('Toque para adicionar foto de perfil'),
                           )
-                          : Center(child: Text('Foto de perfil adicionada')),
+                          : Image.file(_selectedImage!, fit: BoxFit.cover),
                 ),
               ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Prepare the data to be added to Firestore
+                    String? imageUrl;
+                    if (_selectedImage != null) {
+                      imageUrl = await fireAll.uploadImage(
+                        _selectedImage!,
+                        'negocios/${DateTime.now().millisecondsSinceEpoch}.jpg',
+                      );
+                    }
                     final businessData = {
                       'userId': fireAll.getCurrentUserId(),
                       'name': _nameController.text,
@@ -144,25 +166,19 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                       'email': _emailController.text,
                       'phone': _phoneController.text,
                       'location': _locationController.text,
-                      'profilePhoto': _profilePhoto ?? 'No photo added',
+                      'profilePhoto': imageUrl ?? '',
                       'createdAt': FieldValue.serverTimestamp(),
                     };
-
                     try {
-                      // Add data to Firestore
                       await fireAll.addData('negocio', businessData);
-
-                      // Show success message
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Negócio adicionado com sucesso!'),
                         ),
                       );
-
-                      // Clear the form
                       _formKey.currentState!.reset();
                       setState(() {
-                        _profilePhoto = null;
+                        _selectedImage = null;
                       });
                       NavigatorState? navigatorState = Navigator.maybeOf(
                         context,
@@ -173,9 +189,7 @@ class _AddBusinessFormPageState extends State<AddBusinessFormPage> {
                           ..pop()
                           ..pushNamed('/home_page');
                       }
-                      // Mensagem de sucesso? Snackbar
                     } catch (e) {
-                      // Show error message
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Erro ao adicionar negócio: $e'),

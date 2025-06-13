@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:yubook/pages/admin/hamburguer_admin.dart';
+import 'package:yubook/components/custom_drawer.dart';
 
-class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+class UserManagerPage extends StatefulWidget {
+  const UserManagerPage({super.key});
 
   @override
-  State<UsersPage> createState() => _UsersPageState();
+  State<UserManagerPage> createState() => _UserManagerPageState();
 }
 
-class _UsersPageState extends State<UsersPage> {
+class _UserManagerPageState extends State<UserManagerPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _selectedRole = 'todos';
 
@@ -24,10 +27,6 @@ class _UsersPageState extends State<UsersPage> {
     });
   }
 
-  Future<void> _deleteUser(String userId) async {
-    await _firestore.collection('users').doc(userId).delete();
-  }
-
   @override
   Widget build(BuildContext context) {
     final stream =
@@ -40,7 +39,10 @@ class _UsersPageState extends State<UsersPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Usuários', style: Theme.of(context).textTheme.titleLarge),
+        title: Text(
+          'Gestão de Utilizadores',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         actions: [
           DropdownButton<String>(
             value: _selectedRole,
@@ -65,7 +67,7 @@ class _UsersPageState extends State<UsersPage> {
 
           final docs = snapshot.data!.docs;
           if (docs.isEmpty)
-            return const Center(child: Text('Nenhum usuário encontrado.'));
+            return const Center(child: Text('Nenhum utilizador encontrado.'));
 
           return ListView.builder(
             itemCount: docs.length,
@@ -76,6 +78,7 @@ class _UsersPageState extends State<UsersPage> {
               final email = data['email'] ?? 'Sem email';
               final role = data['tipoUser'] ?? 'indefinido';
               final ativo = data['ativo'] ?? true;
+              final criado = (data['criadoEm'] as Timestamp?)?.toDate();
 
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -86,6 +89,10 @@ class _UsersPageState extends State<UsersPage> {
                     children: [
                       Text(email),
                       Text('Perfil: $role'),
+                      if (criado != null)
+                        Text(
+                          'Criado em: ${DateFormat('dd/MM/yyyy').format(criado)}',
+                        ),
                       Text('Estado: ${ativo ? 'Ativo' : 'Desativado'}'),
                     ],
                   ),
@@ -94,60 +101,28 @@ class _UsersPageState extends State<UsersPage> {
                     onSelected: (value) {
                       if (value == 'toggle') {
                         _toggleStatus(id, ativo);
-                      } else if (value == 'delete') {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                title: const Text('Remover usuário'),
-                                content: const Text(
-                                  'Tem certeza que deseja remover este usuário?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      _deleteUser(id);
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Remover'),
-                                  ),
-                                ],
-                              ),
-                        );
                       } else {
                         _updateRole(id, value);
                       }
                     },
                     itemBuilder:
                         (context) => [
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'admin',
-                            child: Text('Tornar Admin'),
+                            child: const Text('Tornar Admin'),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'gestor',
-                            child: Text('Tornar Gestor'),
+                            child: const Text('Tornar Gestor'),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'cliente',
-                            child: Text('Tornar Cliente'),
+                            child: const Text('Tornar Cliente'),
                           ),
                           const PopupMenuDivider(),
                           PopupMenuItem(
                             value: 'toggle',
                             child: Text(ativo ? 'Desativar' : 'Ativar'),
-                          ),
-                          const PopupMenuDivider(),
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Text(
-                              'Remover Usuário',
-                              style: TextStyle(color: Colors.red),
-                            ),
                           ),
                         ],
                   ),
@@ -157,6 +132,7 @@ class _UsersPageState extends State<UsersPage> {
           );
         },
       ),
+      drawer: CustomDrawer(tipoUser: 'admin'),
     );
   }
 }

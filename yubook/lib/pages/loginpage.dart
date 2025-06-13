@@ -119,84 +119,93 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //logo
-              Icon(
-                Icons.person,
-                size: 80,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //logo
+                Image.asset('assets/icon2.png', height: 100),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //app name
-              Text("Y U B O O K", style: TextStyle(fontSize: 20)),
+                //app name
+                Text(
+                  "Y U B O O K",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //email textfKield
-              MyTextField(
-                hintText: "Email",
-                controller: emailController,
-                obscureText: false,
-              ),
+                //email textfKield
+                MyTextField(
+                  hintText: "Email",
+                  controller: emailController,
+                  obscureText: false,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //password textfield
-              MyTextField(
-                hintText: "Password",
-                controller: passwordController,
-                obscureText: true,
-              ),
+                //password textfield
+                MyTextField(
+                  hintText: "Password",
+                  controller: passwordController,
+                  obscureText: true,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              // forgot password
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Forgot password?",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                // forgot password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Forgot password?",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              const SizedBox(height: 25),
-              // sign in button
-              MyButton(text: "Login", onTap: login),
+                const SizedBox(height: 25),
+                // sign in button
+                MyButton(text: "Login", onTap: login),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              MyGoogleButton(text: "Entrar com Google", onTap: loginWithGoogle),
+                MyGoogleButton(
+                  text: "Entrar com Google",
+                  onTap: loginWithGoogle,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //don't have an account? Register here
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Don't have an account?"),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text(
-                      "Register here",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                //don't have an account? Register here
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        "Register here",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

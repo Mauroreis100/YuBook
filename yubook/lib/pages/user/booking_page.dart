@@ -1,168 +1,159 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
-class BookingPage extends StatefulWidget {
-  const BookingPage({super.key});
+class ClientAgendamentosPage extends StatelessWidget {
+  const ClientAgendamentosPage({super.key});
 
-  @override
-  State<BookingPage> createState() => _BookingPageState();
-}
-
-class _BookingPageState extends State<BookingPage> {
-  DateTime? _selectedDateTime;
-  bool _isLoading = false;
+  String? getUserId() {
+    return FirebaseAuth.instance.currentUser?.uid;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    final String serviceId = args['serviceId'];
-    final String negocioId = args['negocioId'];
+    final userId = getUserId();
+
+    if (userId == null) {
+      return const Scaffold(
+        body: Center(child: Text('Usuário não autenticado')),
+      );
+    }
+
+    final agendamentosStream =
+        FirebaseFirestore.instance
+            .collection('agendamentos')
+            .where('clienteId', isEqualTo: userId)
+            .snapshots();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agendar Serviço'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+        title: Text(
+          'Meus Agendamentos',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: FutureBuilder<DocumentSnapshot>(
-          future:
-              FirebaseFirestore.instance
-                  .collection('services')
-                  .doc(serviceId)
-                  .get(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const Center(child: Text('Serviço não encontrado.'));
-            }
-            final service = snapshot.data!.data() as Map<String, dynamic>;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  service['name'] ?? 'Serviço',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  service['description'] ?? '',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Escolha a data e hora:',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    final now = DateTime.now();
-                    final pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: now,
-                      firstDate: now,
-                      lastDate: now.add(const Duration(days: 365)),
-                    );
-                    if (pickedDate != null) {
-                      final pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (pickedTime != null) {
-                        setState(() {
-                          _selectedDateTime = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            pickedTime.hour,
-                            pickedTime.minute,
-                          );
-                        });
-                      }
-                    }
-                  },
-                  child: Text(
-                    _selectedDateTime == null
-                        ? 'Selecionar data e hora'
-                        : '${_selectedDateTime!.day}/${_selectedDateTime!.month}/${_selectedDateTime!.year} ${_selectedDateTime!.hour.toString().padLeft(2, '0')}:${_selectedDateTime!.minute.toString().padLeft(2, '0')}',
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator()),
-                if (!_isLoading)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed:
-                          _selectedDateTime == null
-                              ? null
-                              : () async {
-                                setState(() => _isLoading = true);
-                                try {
-                                  final user =
-                                      FirebaseAuth.instance.currentUser;
-                                  if (user == null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Precisa de estar autenticado.',
-                                        ),
-                                      ),
-                                    );
-                                    setState(() => _isLoading = false);
-                                    return;
-                                  }
-                                  await FirebaseFirestore.instance
-                                      .collection('agendamentos')
-                                      .add({
-                                        'userId': user.uid,
-                                        'negocioId': negocioId,
-                                        'servicoId': serviceId,
-                                        'dataHora': _selectedDateTime,
-                                        'estado': 'pendente',
-                                        'criadoEm':
-                                            FieldValue.serverTimestamp(),
-                                      });
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Agendamento realizado com sucesso!',
-                                        ),
-                                      ),
-                                    );
-                                    Navigator.pop(context);
-                                  }
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Erro ao agendar: $e'),
-                                    ),
-                                  );
-                                } finally {
-                                  if (mounted)
-                                    setState(() => _isLoading = false);
-                                }
-                              },
-                      child: const Text('Confirmar Agendamento'),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: agendamentosStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('Nenhum agendamento encontrado.'));
+          }
+
+          final docs = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final agendamento = docs[index];
+              final data = agendamento.data() as Map<String, dynamic>;
+              final servico = data['servico'] ?? {};
+              final String? servicoId = data['servicoId'];
+              final String? negocioId =
+                  data['negocioId'] ?? data['empresaId'] ?? data['businessId'];
+              final DateTime? agendadoPara =
+                  (data['agendadoPara'] as Timestamp?)?.toDate();
+              final status = data['status'] ?? 'pendente';
+
+              return FutureBuilder<DocumentSnapshot>(
+                future:
+                    negocioId != null
+                        ? FirebaseFirestore.instance
+                            .collection('negocio')
+                            .doc(negocioId)
+                            .get()
+                        : Future.value(null),
+                builder: (context, negocioSnapshot) {
+                  final negocioData =
+                      negocioSnapshot.data?.data() as Map<String, dynamic>?;
+                  final nomeNegocio = negocioData?['name'] ?? 'Negócio';
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                  ),
-              ],
-            );
-          },
-        ),
+                    child: ListTile(
+                      leading: const Icon(Icons.event_note),
+                      title: Text(servico['nome'] ?? 'Serviço'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Negócio: $nomeNegocio'),
+                          if (agendadoPara != null)
+                            Text(
+                              'Data: ${DateFormat('dd/MM/yyyy – HH:mm').format(agendadoPara)}',
+                            ),
+                          Text('Status: $status'),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            tooltip: 'Editar agendamento',
+                            onPressed: () {
+                              // TODO: Implementar edição de agendamento
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Funcionalidade de edição em breve!',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.cancel, color: Colors.red),
+                            tooltip: 'Cancelar agendamento',
+                            onPressed: () async {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      title: const Text('Cancelar Agendamento'),
+                                      content: const Text(
+                                        'Tem certeza que deseja cancelar este agendamento?',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(context, false),
+                                          child: const Text('Não'),
+                                        ),
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(context, true),
+                                          child: const Text('Sim'),
+                                        ),
+                                      ],
+                                    ),
+                              );
+                              if (confirm == true) {
+                                await agendamento.reference.delete();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Agendamento cancelado!'),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 class BookingHistoryPage extends StatelessWidget {
   const BookingHistoryPage({super.key});
@@ -46,7 +47,21 @@ class BookingHistoryPage extends StatelessWidget {
                 leading: const Icon(Icons.event_available),
                 title: Text('Serviço: ${agendamento['servicoId']}'),
                 subtitle: Text(
-                  'Data: ${dataHora.day}/${dataHora.month}/${dataHora.year} ${dataHora.hour.toString().padLeft(2, '0')}:${dataHora.minute.toString().padLeft(2, '0')}\nEstado: ${agendamento['estado']}',
+                  "Data: ${dataHora.day}/${dataHora.month}/${dataHora.year} ${dataHora.hour.toString().padLeft(2, '0')}:${dataHora.minute.toString().padLeft(2, '0')}\nEstado: ${agendamento['estado']}",
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.calendar_month),
+                  tooltip: 'Exportar para calendário',
+                  onPressed: () {
+                    final event = Event(
+                      title: 'Agendamento: ${agendamento['servicoId']}',
+                      description: 'Agendamento de serviço no YuBook',
+                      location: '',
+                      startDate: dataHora,
+                      endDate: dataHora.add(const Duration(hours: 1)),
+                    );
+                    Add2Calendar.addEvent2Cal(event);
+                  },
                 ),
               );
             },

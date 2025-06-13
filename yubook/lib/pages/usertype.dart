@@ -8,22 +8,26 @@ class UserTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Retrieve arguments
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
     final username = args?['username'] ?? 'Unknown';
     final email = args?['email'] ?? 'Unknown';
-    final User? currentUser=FirebaseAuth.instance.currentUser;
-    final uid = args?['uid'] ?? 'Unknown'; // Ensure UID is passed from the registration page
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    final uid =
+        args?['uid'] ??
+        'Unknown'; // Ensure UID is passed from the registration page
 
-print(uid);
+    print(uid);
     // Function to update user type in Firestore
     Future<void> updateUserType(String userType) async {
       try {
         // Query Firestore to find the document with the matching email
-        final querySnapshot = await _firestore
-            .collection('users')
-            .where('email', isEqualTo: email)
-            .get();
+        final querySnapshot =
+            await _firestore
+                .collection('users')
+                .where('email', isEqualTo: email)
+                .get();
 
         if (querySnapshot.docs.isNotEmpty) {
           // Get the document ID of the first matching document
@@ -45,7 +49,10 @@ print(uid);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Escolha o Tipo de Usuário'),
+        title: Text(
+          'Escolha o Tipo de Usuário',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
       ),
       body: Center(
         child: Column(
@@ -72,7 +79,7 @@ print(uid);
                 // Update user type to "Business" in Firestore
                 await updateUserType('gestor');
                 // Navigate to Business form page
-               
+
                 Navigator.pushNamed(context, '/add_business_form');
               },
               child: const Text('Business'),

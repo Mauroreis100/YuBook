@@ -133,89 +133,97 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //logo
-              Icon(
-                Icons.person,
-                size: 80,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //logo
+                Icon(
+                  Icons.person,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //app name
-              Text("Y U B O O K", style: TextStyle(fontSize: 20)),
+                //app name
+                Text(
+                  "Y U B O O K",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //username textfKield
-              MyTextField(
-                hintText: "Username",
-                controller: usernameController,
-                obscureText: false,
-              ),
+                //username textfKield
+                MyTextField(
+                  hintText: "Username",
+                  controller: usernameController,
+                  obscureText: false,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //email textfKield
-              MyTextField(
-                hintText: "Email",
-                controller: emailController,
-                obscureText: false,
-              ),
+                //email textfKield
+                MyTextField(
+                  hintText: "Email",
+                  controller: emailController,
+                  obscureText: false,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //password textfield
-              MyTextField(
-                hintText: "Password",
-                controller: passwordController,
-                obscureText: true,
-              ),
+                //password textfield
+                MyTextField(
+                  hintText: "Password",
+                  controller: passwordController,
+                  obscureText: true,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //confirm password textfield
-              MyTextField(
-                hintText: "Confirm Password",
-                controller: confirmPasswordController,
-                obscureText: true,
-              ),
+                //confirm password textfield
+                MyTextField(
+                  hintText: "Confirm Password",
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              const SizedBox(height: 25),
-              // sign in button
-              MyButton(text: "Register", onTap: registerUser),
+                const SizedBox(height: 25),
+                // sign in button
+                MyButton(text: "Register", onTap: registerUser),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              MyGoogleButton(text: "Entrar com Google", onTap: loginWithGoogle),
+                MyGoogleButton(
+                  text: "Entrar com Google",
+                  onTap: loginWithGoogle,
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              //Already have an account? Login here
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Already have an account?"),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/loginpage');
-                    },
-                    child: Text(
-                      "Login here",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                //Already have an account? Login here
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already have an account?"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/loginpage');
+                      },
+                      child: Text(
+                        "Login here",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
